@@ -52,7 +52,7 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Bookman Old Style", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Location = new System.Drawing.Point(92, 5);
+            this.label1.Location = new System.Drawing.Point(69, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(0, 19);
             this.label1.TabIndex = 2;
@@ -80,14 +80,15 @@
             // listBox1
             // 
             this.listBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.listBox1.Font = new System.Drawing.Font("Bookman Old Style", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.listBox1.Font = new System.Drawing.Font("Bookman Old Style", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 19;
+            this.listBox1.ItemHeight = 20;
             this.listBox1.Location = new System.Drawing.Point(12, 83);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(235, 327);
+            this.listBox1.Size = new System.Drawing.Size(235, 324);
             this.listBox1.Sorted = true;
             this.listBox1.TabIndex = 3;
+            this.listBox1.Visible = false;
             this.listBox1.Click += new System.EventHandler(this.listBox1_Click);
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
@@ -115,6 +116,7 @@
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Контакты";
+            this.groupBox1.Visible = false;
             // 
             // contextMenuStrip1
             // 
@@ -146,23 +148,25 @@
             this.полнаяИнформацияToolStripMenuItem.Name = "полнаяИнформацияToolStripMenuItem";
             this.полнаяИнформацияToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.полнаяИнформацияToolStripMenuItem.Text = "Полная информация...";
+            this.полнаяИнформацияToolStripMenuItem.Click += new System.EventHandler(this.полнаяИнформацияToolStripMenuItem_Click);
             // 
             // показатьИсториюСообщенийToolStripMenuItem
             // 
             this.показатьИсториюСообщенийToolStripMenuItem.Name = "показатьИсториюСообщенийToolStripMenuItem";
             this.показатьИсториюСообщенийToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.показатьИсториюСообщенийToolStripMenuItem.Text = "Показать историю сообщений";
+            this.показатьИсториюСообщенийToolStripMenuItem.Click += new System.EventHandler(this.показатьИсториюСообщенийToolStripMenuItem_Click);
             // 
             // listBox2
             // 
-            this.listBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.listBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listBox2.FormattingEnabled = true;
             this.listBox2.HorizontalScrollbar = true;
-            this.listBox2.ItemHeight = 15;
+            this.listBox2.ItemHeight = 16;
             this.listBox2.Location = new System.Drawing.Point(266, 83);
             this.listBox2.Name = "listBox2";
             this.listBox2.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.listBox2.Size = new System.Drawing.Size(494, 319);
+            this.listBox2.Size = new System.Drawing.Size(494, 308);
             this.listBox2.TabIndex = 10;
             this.listBox2.Visible = false;
             // 
@@ -179,6 +183,7 @@
             // 
             // saveFileDialog1
             // 
+            this.saveFileDialog1.DefaultExt = "txt";
             this.saveFileDialog1.Filter = "*.txt|*.*";
             // 
             // Form1
@@ -195,9 +200,11 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "4Skype";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);

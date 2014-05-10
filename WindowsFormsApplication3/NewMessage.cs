@@ -12,12 +12,13 @@ namespace WindowsFormsApplication3
 {
     public partial class NewMessage : Form
     {
-        public NewMessage()
+        public NewMessage(string friend)
         {
             InitializeComponent();
-            main = new Form1();
+            this.friend = friend;
+            //main = new Form1();
         }
-        Form1 main;
+      //  Form1 main;
         public string friend;
         public string text_message;
         private void button1_Click(object sender, EventArgs e)
