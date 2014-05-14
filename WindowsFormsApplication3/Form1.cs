@@ -44,37 +44,60 @@ namespace WindowsFormsApplication3
             skype_machine = new Skype();
             if (!skype_machine.Client.IsRunning)
             {
-                skype_machine.Client.Start(true, true);               
+                skype_machine.Client.Start(true, true);
             }
             skype_machine.Attach(9, false);
             ((_ISkypeEvents_Event)skype_machine).AttachmentStatus += OurAttachmentStatus;
-             skype_machine.MessageStatus += ReceiveMessage;
-
+            ((_ISkypeEvents_Event)skype_machine).MessageStatus += ReceiveMessage;
+            
+            
+            
         }
 
         private void OurAttachmentStatus(TAttachmentStatus status)
         {
-            if (status == TAttachmentStatus.apiAttachSuccess)
+            if (status == TAttachmentStatus.apiAttachPendingAuthorization)
             {
                 MessageBox.Show("Присоединение прошло успешно");
                 current_user = new User(skype_machine);
-                label1.Text = "Привет, " + current_user.GetUser();
                 button1.BackgroundImage = WindowsFormsApplication3.Properties.Resources.skype__on;
                 checkBox1.Visible = true;
                 groupBox1.Visible = true;
                 listBox1.Visible = true;
+                button1.Enabled = false;
+                label1.Text = "";
+                label1.Text += current_user.GetUser();
+                if (skype_machine.CurrentUser.OnlineStatus == TOnlineStatus.olsOffline)
+                {
+                    label1.Text += " - Вы offline";
+                }
+                else
+                {
+                    label1.Text += " - Вы online";
+                }
+                button1.FlatAppearance.BorderSize = 0;
                 AllFriends = current_user.GetAllFriends(skype_machine);
+                ((_ISkypeEvents_Event)skype_machine).UserStatus += StatusChange;
                 foreach (string friend in AllFriends)
                 {
                     listBox1.Items.Add(friend);
                 }
                 
             }
+            if (status == TAttachmentStatus.apiAttachNotAvailable)
+            {
+                if(MessageBox.Show("Скайп был выключен программа будет закрыта")==DialogResult.OK)
+                {
+                    this.Close();
+                }
+                
+            }
         }
+        
         private void ReceiveMessage(ChatMessage pmessage, TChatMessageStatus status)
         {
             //Если сообщение получено
-            if (status == TChatMessageStatus.cmsReceived)
+            if ((status == TChatMessageStatus.cmsReceived)|(status == TChatMessageStatus.cmsSending))
             {
                 if(checked_friend!=null)
                 {
@@ -87,8 +110,33 @@ namespace WindowsFormsApplication3
             }
         }
 
+        private void StatusChange(TUserStatus status)
+        {
+            label1.Text = "";
+            if (status == TUserStatus.cusOffline) 
+            {
+                label1.Text += current_user.GetUser();
+                label1.Text += " - Вы offline";
+                позвонитьToolStripMenuItem.Enabled = false;
+                написатьСообщениеToolStripMenuItem.Enabled = false;
+            }
+            else
+            {
+                label1.Text += current_user.GetUser();
+                label1.Text += " - Вы online";
+                позвонитьToolStripMenuItem.Enabled = true;
+                написатьСообщениеToolStripMenuItem.Enabled = true;
+            }
+        }
         private void button2_Click(object sender, EventArgs e)
         {
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                StreamWriter sw = new StreamWriter(saveFileDialog1.FileName);
+                foreach (string s in listBox2.Items)
+                    sw.WriteLine(s);
+                sw.Close();
+            }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -129,32 +177,6 @@ namespace WindowsFormsApplication3
                
         }
 
-        public string ShowInfo(string user)
-        {
-
-            string name="", bd="", country="", city="", disp_name="", online="";
-            if (skype_machine.get_User(user).FullName != null)
-                 name = skype_machine.get_User(user).FullName;
-          
-              if (skype_machine.get_User(user).Birthday.ToString()!= null)
-                  bd = skype_machine.get_User(user).Birthday.ToString();
-
-              if (skype_machine.get_User(user).Country != null)
-                    country = skype_machine.get_User(user).Country;
-
-              if (skype_machine.get_User(user).City != null)
-                      city = skype_machine.get_User(user).City;
-
-              if (skype_machine.get_User(user).DisplayName != null)
-           disp_name= skype_machine.get_User(user).DisplayName;
-
-              if (skype_machine.get_User(user).LastOnline.ToString()!= null)
-           online = skype_machine.get_User(user).LastOnline.ToString();
-
-              string result = name + "\n\r" + country + "\n\r" + city + "\n\r" + bd + "\n\r" + online;
-            return result;
-            
-        }
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
@@ -179,7 +201,7 @@ namespace WindowsFormsApplication3
         {
             if (skype_machine.get_User(checked_friend).OnlineStatus == TOnlineStatus.olsOffline)
             {
-                MessageBox.Show(checked_friend + " status is " + skype_machine.get_User(checked_friend).OnlineStatus);
+                MessageBox.Show(checked_friend + " status is " + "Offlain");
             }
             else
                 skype_machine.PlaceCall(checked_friend);
@@ -206,13 +228,7 @@ namespace WindowsFormsApplication3
 
         private void button2_Click_2(object sender, EventArgs e)
         {
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                StreamWriter sw = new StreamWriter(saveFileDialog1.FileName);
-                 foreach (string s in listBox2.Items)
-                 sw.WriteLine(s);
-                sw.Close();
-            }
+           
         }
 
         private void показатьИсториюСообщенийToolStripMenuItem_Click(object sender, EventArgs e)
